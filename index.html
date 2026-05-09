@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FarmacIA — Mockup</title>
+<title>FarmacIA - Mockup</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -57,7 +57,7 @@
     <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center font-bold">F</div>
     <div>
       <div class="font-semibold">FarmacIA</div>
-      <div class="text-xs text-slate-400">Mockup demonstrativo — não é produto final</div>
+      <div class="text-xs text-slate-400">Mockup demonstrativo - não é produto final</div>
     </div>
   </div>
   <div class="flex gap-2 text-sm">
@@ -178,7 +178,7 @@
     </div>
 
     <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 text-center text-sm text-amber-900 font-medium">
-      ⚕ Sugestão preliminar — sujeita à validação do farmacêutico
+      ⚕ Sugestão preliminar - sujeita à validação do farmacêutico
     </div>
 
     <button onclick="showScreen('welcome')" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl">
@@ -211,9 +211,9 @@
     <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-4 text-sm text-slate-700">
       <div class="font-semibold mb-2 text-slate-800">Onde buscar atendimento</div>
       <ul class="space-y-1.5">
-        <li>📞 SAMU — 192</li>
+        <li>📞 SAMU - 192</li>
         <li>🏥 UPA mais próxima: Av. Brasil, 1234 (1,2 km)</li>
-        <li>🏥 Pronto-socorro Hospital Santa Casa — 4,5 km</li>
+        <li>🏥 Pronto-socorro Hospital Santa Casa - 4,5 km</li>
       </ul>
     </div>
 
@@ -223,11 +223,11 @@
         <div class="text-xs text-red-600 font-semibold">PRIORIDADE</div>
       </div>
       <div class="text-5xl font-bold text-red-700 text-center tracking-wider">F046</div>
-      <div class="text-xs text-slate-500 text-center mt-2">Procure o farmacêutico — ele já foi avisado.</div>
+      <div class="text-xs text-slate-500 text-center mt-2">Procure o farmacêutico - ele já foi avisado.</div>
     </div>
 
     <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 text-center text-sm text-amber-900">
-      ⚕ Encaminhamento sugerido — confirmação com farmacêutico
+      ⚕ Encaminhamento sugerido - confirmação com farmacêutico
     </div>
 
     <button onclick="showScreen('welcome')" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl">
@@ -242,7 +242,7 @@
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-2xl font-bold text-slate-800">Painel do Farmacêutico</h1>
-        <p class="text-slate-600 text-sm">Dra. Ana Souza — CRF/SP 12345 • Farmácia São José</p>
+        <p class="text-slate-600 text-sm">Dra. Ana Souza - CRF/SP 12345 • Farmácia São José</p>
       </div>
       <div class="flex gap-3">
         <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
@@ -269,7 +269,7 @@
         </div>
         <div id="queueList" class="divide-y divide-slate-100"></div>
         <div class="p-4 bg-slate-50 text-center text-xs text-slate-500">
-          Atualiza em tempo real — novos casos aparecem no topo
+          Atualiza em tempo real - novos casos aparecem no topo
         </div>
       </div>
 
@@ -303,12 +303,12 @@ function nameLabel(name) {
 
 // ============= ANAMNESE =============
 const conversation = [
-  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou te fazer algumas perguntas pra preparar uma ficha pro farmacêutico. Pode levar uns 2 minutinhos. Pra começar — o que você está sentindo hoje?",
+  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou te fazer algumas perguntas pra preparar uma ficha pro farmacêutico. Pode levar uns 2 minutinhos. Pra começar - o que você está sentindo hoje?",
     options: ["Dor de cabeça", "Azia ou má digestão", "Gripe ou resfriado", "Dor muscular", "Outra coisa"] },
   { bot: "Entendi, dor de cabeça. Há quanto tempo começou?",
     options: ["Menos de 1 hora", "Algumas horas", "Desde ontem", "Há vários dias"] },
   { bot: "E como você descreveria a intensidade?",
-    options: ["Leve — desconfortável", "Moderada — atrapalha", "Forte — não consigo continuar"] },
+    options: ["Leve - desconfortável", "Moderada - atrapalha", "Forte - não consigo continuar"] },
   { bot: "Você tem algum desses sintomas junto com a dor?",
     options: ["Não, só a dor", "Náusea ou enjoo", "Visão embaçada / luzes", "Febre"] },
   { bot: "Você tem alguma alergia conhecida a medicamentos?",
@@ -636,7 +636,7 @@ function renderCaseDetail() {
     <div class="${headerColor} text-white px-6 py-4 rounded-t-2xl flex items-center justify-between">
       <div>
         <div class="text-xs opacity-80">Caso atual</div>
-        <div class="text-xl font-bold">${c.id} — ${c.label}</div>
+        <div class="text-xl font-bold">${c.id} - ${c.label}</div>
       </div>
       <span class="${badgeColor} font-semibold px-3 py-1.5 rounded-lg text-sm">${badgeText}</span>
     </div>
