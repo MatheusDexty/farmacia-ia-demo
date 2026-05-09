@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FarmacIA — Mockup</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  .fade-in { animation: fadeIn 0.4s ease-in; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .typing-dot {
+    animation: typing 1.4s infinite;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #94a3b8;
+    margin: 0 2px;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+  .nav-pill { transition: all 0.2s; }
+  .nav-pill.active { background: #0f766e; color: white; }
+  .queue-item { transition: all 0.15s; cursor: pointer; }
+  .queue-item.selected {
+    box-shadow: inset 4px 0 0 #0f766e;
+    background-color: #f0fdfa !important;
+  }
+  .toast {
+    animation: slideIn 0.3s ease-out, slideOut 0.3s ease-in 2.7s forwards;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-20px); }
+  }
+</style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+<div id="toastContainer" class="fixed top-20 right-6 z-50 space-y-2"></div>
+
+<!-- Top Navigation (demo only) -->
+<div class="bg-slate-900 text-white px-6 py-3 flex items-center justify-between sticky top-0 z-40">
+  <div class="flex items-center gap-3">
+    <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center font-bold">F</div>
+    <div>
+      <div class="font-semibold">FarmacIA</div>
+      <div class="text-xs text-slate-400">Mockup demonstrativo — não é produto final</div>
+    </div>
+  </div>
+  <div class="flex gap-2 text-sm">
+    <button onclick="showScreen('welcome')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">1. Boas-vindas</button>
+    <button onclick="showScreen('anamnese')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">2. Anamnese</button>
+    <button onclick="showScreen('ficha')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">3. Ficha</button>
+    <button onclick="showScreen('redflag')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">4. Red Flag</button>
+    <button onclick="showScreen('painel')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">5. Painel</button>
+  </div>
+</div>
+
+<!-- Screen 1: Welcome / LGPD -->
+<div id="welcome" class="screen min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+    <div class="text-center mb-8">
+      <div class="w-20 h-20 bg-teal-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+        <svg class="w-10 h-10 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z M12 8v4l3 2"/>
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-slate-800 mb-2">Bem-vindo à Farmácia São José</h1>
+      <p class="text-slate-600">Vamos preparar uma ficha pra que o farmacêutico possa te atender melhor.</p>
+    </div>
+
+    <div class="bg-slate-50 rounded-xl p-5 mb-6 text-sm text-slate-700">
+      <div class="font-semibold mb-2 text-slate-800">Como funciona</div>
+      <ol class="space-y-1.5 list-decimal list-inside">
+        <li>Você responde algumas perguntas sobre o que está sentindo</li>
+        <li>Geramos uma ficha com seus sintomas pra agilizar o atendimento</li>
+        <li>O <strong>farmacêutico</strong> sempre vai te atender e decidir o melhor caminho</li>
+      </ol>
+    </div>
+
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-sm text-slate-700">
+      <div class="font-semibold text-amber-900 mb-1.5 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"/></svg>
+        Privacidade e LGPD
+      </div>
+      <p>Suas respostas são tratadas como dado de saúde sensível. Usamos só pra te atender, com criptografia e exclusão automática conforme nossa política. Seus dados não são compartilhados com terceiros.</p>
+    </div>
+
+    <label class="flex items-start gap-3 mb-6 cursor-pointer">
+      <input type="checkbox" id="consent" class="mt-1 w-5 h-5 rounded text-teal-600">
+      <span class="text-sm text-slate-700">Li e aceito os <a href="#" class="text-teal-700 underline">termos de uso</a> e a <a href="#" class="text-teal-700 underline">política de privacidade</a>. Confirmo que as informações que vou prestar são verdadeiras.</span>
+    </label>
+
+    <button onclick="showScreen('anamnese')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-xl text-lg transition">
+      Começar →
+    </button>
+
+    <p class="text-center text-xs text-slate-400 mt-4">Atendimento humano disponível • Aperte qualquer botão pra chamar um atendente</p>
+  </div>
+</div>
+
+<!-- Screen 2: Anamnese (chat) -->
+<div id="anamnese" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full overflow-hidden fade-in flex flex-col" style="height: 85vh;">
+    <div class="bg-teal-600 text-white p-4 flex items-center gap-3">
+      <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">IA</div>
+      <div>
+        <div class="font-semibold">Atendente Virtual</div>
+        <div class="text-xs text-teal-100">Coletando informações pra o farmacêutico</div>
+      </div>
+      <div class="ml-auto text-xs bg-white/20 px-2 py-1 rounded-full">Pergunta <span id="qNum">1</span> de 6</div>
+    </div>
+
+    <div id="chat" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50"></div>
+
+    <div id="inputArea" class="p-4 bg-white border-t">
+      <div id="quickReplies" class="flex flex-wrap gap-2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Screen 3: Ficha generated -->
+<div id="ficha" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+    <div class="text-center mb-6">
+      <div class="w-20 h-20 bg-emerald-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+        <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-800 mb-1">Ficha gerada!</h1>
+      <p class="text-slate-600">Mostre essa tela ao farmacêutico no balcão.</p>
+    </div>
+
+    <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-5 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-xs text-slate-500">SENHA DE ATENDIMENTO</div>
+        <div class="text-xs text-slate-500">14:32</div>
+      </div>
+      <div class="text-5xl font-bold text-teal-700 text-center tracking-wider">F045</div>
+    </div>
+
+    <div class="border border-slate-200 rounded-xl p-5 mb-4">
+      <div class="text-xs uppercase text-slate-500 font-semibold mb-2">Resumo da anamnese</div>
+      <ul class="text-sm text-slate-700 space-y-1.5">
+        <li>• Dor de cabeça leve a moderada</li>
+        <li>• Há aproximadamente 4 horas</li>
+        <li>• Sem outros sintomas associados</li>
+        <li>• Sem alergias conhecidas</li>
+        <li>• Não usa medicação contínua</li>
+        <li>• Não está gestante</li>
+      </ul>
+    </div>
+
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-4">
+      <div class="flex items-center gap-2 mb-2">
+        <svg class="w-5 h-5 text-blue-700" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"/></svg>
+        <div class="font-semibold text-blue-900">Sugestão preliminar (pendente de validação)</div>
+      </div>
+      <div class="text-slate-700">
+        <strong>Categoria:</strong> Analgésico simples<br>
+        <strong>Princípio ativo:</strong> Dipirona ou Paracetamol
+      </div>
+      <div class="text-xs text-slate-500 mt-2 italic">A indicação final é responsabilidade do farmacêutico.</div>
+    </div>
+
+    <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 text-center text-sm text-amber-900 font-medium">
+      ⚕ Sugestão preliminar — sujeita à validação do farmacêutico
+    </div>
+
+    <button onclick="showScreen('welcome')" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl">
+      Concluir e voltar ao início
+    </button>
+  </div>
+</div>
+
+<!-- Screen 4: Red Flag -->
+<div id="redflag" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+    <div class="text-center mb-6">
+      <div class="w-20 h-20 bg-red-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
+        <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-red-700 mb-1">Atenção necessária</h1>
+      <p class="text-slate-700">Os sintomas que você descreveu pedem avaliação médica imediata.</p>
+    </div>
+
+    <div class="bg-red-50 border-2 border-red-300 rounded-xl p-5 mb-4">
+      <div class="font-semibold text-red-900 mb-2">Recomendamos procurar atendimento médico</div>
+      <p class="text-sm text-slate-700">
+        Cefaleia súbita e intensa, acompanhada de náusea, em pessoa acima de 60 anos pode indicar condição que precisa de avaliação médica imediata.
+        <strong>Não recomendamos automedicação neste caso.</strong>
+      </p>
+    </div>
+
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-4 text-sm text-slate-700">
+      <div class="font-semibold mb-2 text-slate-800">Onde buscar atendimento</div>
+      <ul class="space-y-1.5">
+        <li>📞 SAMU — 192</li>
+        <li>🏥 UPA mais próxima: Av. Brasil, 1234 (1,2 km)</li>
+        <li>🏥 Pronto-socorro Hospital Santa Casa — 4,5 km</li>
+      </ul>
+    </div>
+
+    <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-5 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-xs text-slate-500">SENHA</div>
+        <div class="text-xs text-red-600 font-semibold">PRIORIDADE</div>
+      </div>
+      <div class="text-5xl font-bold text-red-700 text-center tracking-wider">F046</div>
+      <div class="text-xs text-slate-500 text-center mt-2">Procure o farmacêutico — ele já foi avisado.</div>
+    </div>
+
+    <div class="bg-amber-50 border border-amber-300 rounded-xl p-4 text-center text-sm text-amber-900">
+      ⚕ Encaminhamento sugerido — confirmação com farmacêutico
+    </div>
+
+    <button onclick="showScreen('welcome')" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-3 rounded-xl">
+      Voltar ao início
+    </button>
+  </div>
+</div>
+
+<!-- Screen 5: Pharmacist panel -->
+<div id="painel" class="screen hidden min-h-[calc(100vh-60px)] p-6 fade-in">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Painel do Farmacêutico</h1>
+        <p class="text-slate-600 text-sm">Dra. Ana Souza — CRF/SP 12345 • Farmácia São José</p>
+      </div>
+      <div class="flex gap-3">
+        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+          <div class="text-xs text-slate-500">Casos hoje</div>
+          <div class="text-2xl font-bold text-slate-800" id="statCases">23</div>
+        </div>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+          <div class="text-xs text-slate-500">Tempo médio</div>
+          <div class="text-2xl font-bold text-emerald-600">1m 24s</div>
+        </div>
+        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+          <div class="text-xs text-slate-500">Aprovação IA</div>
+          <div class="text-2xl font-bold text-teal-600">78%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-4">
+      <!-- Queue -->
+      <div class="col-span-4 bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div class="bg-slate-100 px-4 py-3 font-semibold text-slate-700 flex items-center justify-between">
+          <span>Fila de atendimento</span>
+          <span class="bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full" id="queueCount">4</span>
+        </div>
+        <div id="queueList" class="divide-y divide-slate-100"></div>
+        <div class="p-4 bg-slate-50 text-center text-xs text-slate-500">
+          Atualiza em tempo real — novos casos aparecem no topo
+        </div>
+      </div>
+
+      <!-- Case detail -->
+      <div class="col-span-8 bg-white rounded-2xl shadow-sm" id="caseDetail"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const screens = ['welcome', 'anamnese', 'ficha', 'redflag', 'painel'];
+
+function showScreen(name) {
+  screens.forEach(s => {
+    const el = document.getElementById(s);
+    if (s === name) el.classList.remove('hidden');
+    else el.classList.add('hidden');
+  });
+  document.querySelectorAll('.nav-pill').forEach(b => {
+    b.classList.remove('active');
+    if (b.textContent.toLowerCase().includes(nameLabel(name))) b.classList.add('active');
+  });
+  if (name === 'anamnese') startAnamnese();
+  if (name === 'painel') renderPainel();
+  window.scrollTo(0, 0);
+}
+
+function nameLabel(name) {
+  return { welcome: 'boas', anamnese: 'anamnese', ficha: 'ficha', redflag: 'red', painel: 'painel' }[name];
+}
+
+// ============= ANAMNESE =============
+const conversation = [
+  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou te fazer algumas perguntas pra preparar uma ficha pro farmacêutico. Pode levar uns 2 minutinhos. Pra começar — o que você está sentindo hoje?",
+    options: ["Dor de cabeça", "Azia ou má digestão", "Gripe ou resfriado", "Dor muscular", "Outra coisa"] },
+  { bot: "Entendi, dor de cabeça. Há quanto tempo começou?",
+    options: ["Menos de 1 hora", "Algumas horas", "Desde ontem", "Há vários dias"] },
+  { bot: "E como você descreveria a intensidade?",
+    options: ["Leve — desconfortável", "Moderada — atrapalha", "Forte — não consigo continuar"] },
+  { bot: "Você tem algum desses sintomas junto com a dor?",
+    options: ["Não, só a dor", "Náusea ou enjoo", "Visão embaçada / luzes", "Febre"] },
+  { bot: "Você tem alguma alergia conhecida a medicamentos?",
+    options: ["Não tenho alergias", "Sim, dipirona", "Sim, anti-inflamatório", "Outras"] },
+  { bot: "Última pergunta: você toma algum remédio de uso contínuo? Ou está gestante / amamentando?",
+    options: ["Não tomo nada e não estou gestante", "Tomo remédio contínuo", "Estou gestante", "Estou amamentando"] }
+];
+
+let currentQ = 0;
+
+function startAnamnese() {
+  currentQ = 0;
+  document.getElementById('chat').innerHTML = '';
+  document.getElementById('qNum').textContent = '1';
+  setTimeout(() => askQuestion(0), 300);
+}
+
+function askQuestion(idx) {
+  if (idx >= conversation.length) { finishAnamnese(); return; }
+  currentQ = idx;
+  document.getElementById('qNum').textContent = idx + 1;
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addBotMessage(conversation[idx].bot);
+    showOptions(conversation[idx].options, idx);
+  }, 900);
+}
+
+function showTyping() {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.id = 'typing';
+  div.className = 'flex items-end gap-2';
+  div.innerHTML = `
+    <div class="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">IA</div>
+    <div class="bg-white rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+      <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
+    </div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function addBotMessage(text) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'flex items-end gap-2 fade-in';
+  div.innerHTML = `
+    <div class="w-8 h-8 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">IA</div>
+    <div class="bg-white rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm max-w-md text-slate-800">${text}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addUserMessage(text) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'flex justify-end fade-in';
+  div.innerHTML = `<div class="bg-teal-600 text-white rounded-2xl rounded-br-sm px-4 py-3 shadow-sm max-w-md">${text}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showOptions(options, qIdx) {
+  const area = document.getElementById('quickReplies');
+  area.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'bg-slate-100 hover:bg-teal-100 hover:text-teal-800 text-slate-700 px-4 py-2 rounded-full text-sm font-medium border border-slate-200 transition';
+    btn.textContent = opt;
+    btn.onclick = () => {
+      addUserMessage(opt);
+      area.innerHTML = '';
+      setTimeout(() => askQuestion(qIdx + 1), 500);
+    };
+    area.appendChild(btn);
+  });
+}
+
+function finishAnamnese() {
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addBotMessage("Perfeito, terminamos! Estou montando a sua ficha agora...");
+    document.getElementById('quickReplies').innerHTML = '';
+    setTimeout(() => {
+      addBotMessage("✓ Ficha gerada. Pegue a senha <strong>F045</strong> e dirija-se ao balcão. O farmacêutico já foi avisado.");
+      const area = document.getElementById('quickReplies');
+      const btn = document.createElement('button');
+      btn.className = 'bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-6 rounded-xl w-full';
+      btn.textContent = 'Ver ficha →';
+      btn.onclick = () => showScreen('ficha');
+      area.appendChild(btn);
+    }, 1200);
+  }, 900);
+}
+
+// ============= PAINEL DO FARMACÊUTICO =============
+let cases = [
+  {
+    id: 'F046', kind: 'redflag', age: 62, sex: 'M', sexFull: 'Masculino', label: 'Homem, 62 anos',
+    title: 'Cefaleia súbita + náusea', waitingMin: 0, openedMin: 0,
+    pregnant: 'N/A', allergies: 'Nenhuma conhecida', meds: 'Captopril (uso contínuo)',
+    symptoms: [
+      'Cefaleia <strong>súbita e forte</strong>',
+      'Início há <strong>~30 minutos</strong>',
+      '<strong>Náusea</strong> associada',
+      'Sem febre',
+      'Sem trauma recente'
+    ],
+    redFlags: [
+      'Cefaleia súbita em paciente >60 anos (regra RF-04)',
+      'Náusea associada a cefaleia intensa (regra RF-07)'
+    ],
+    suggestion: null
+  },
+  {
+    id: 'F045', kind: 'suggestion', age: 45, sex: 'F', sexFull: 'Feminino', label: 'Mulher, 45 anos',
+    title: 'Dor de cabeça leve, 4h', waitingMin: 1, openedMin: 1,
+    pregnant: 'Não', allergies: 'Nenhuma conhecida', meds: 'Não',
+    symptoms: [
+      'Dor de cabeça <strong>leve a moderada</strong>',
+      'Há <strong>~4 horas</strong>',
+      'Sem náusea, sem aura visual',
+      'Sem febre',
+      'Não tomou nada ainda'
+    ],
+    suggestion: {
+      category: 'Analgésico simples',
+      activeIngredient: 'Dipirona ou Paracetamol',
+      confidence: 87,
+      reasoning: 'Cefaleia leve sem sinais de gravidade, sem alergia, sem contraindicação por idade ou comorbidade. Categoria padrão pra MIP nessa apresentação.'
+    }
+  },
+  {
+    id: 'F044', kind: 'no-suggestion', age: 28, sex: 'M', sexFull: 'Masculino', label: 'Homem, 28 anos',
+    title: 'Desconforto abdominal vago', waitingMin: 2, openedMin: 2,
+    pregnant: 'N/A', allergies: 'Nenhuma conhecida', meds: 'Não',
+    symptoms: [
+      '<strong>Desconforto abdominal</strong> mal localizado',
+      'Há <strong>1-2 dias</strong>',
+      'Sem náusea persistente',
+      'Sem febre, sem diarreia',
+      'Hábitos alimentares recentes irregulares'
+    ],
+    suggestion: null,
+    noSuggestionReason: 'Sintomas inespecíficos. Anamnese não permite distinguir entre dispepsia, gastrite, intolerância alimentar ou quadro mais sério. IA optou por não sugerir.'
+  },
+  {
+    id: 'F043', kind: 'suggestion', age: 33, sex: 'F', sexFull: 'Feminino', label: 'Mulher, 33 anos',
+    title: 'Azia após almoço', waitingMin: 3, openedMin: 3,
+    pregnant: 'Não', allergies: 'Nenhuma conhecida', meds: 'Anticoncepcional',
+    symptoms: [
+      '<strong>Azia / queimação retroesternal</strong>',
+      'Após refeições gordurosas',
+      'Há <strong>~2 dias</strong>',
+      'Sem dor torácica',
+      'Sem disfagia'
+    ],
+    suggestion: {
+      category: 'Antiácido',
+      activeIngredient: 'Hidróxido de alumínio + magnésio, ou Carbonato de cálcio',
+      confidence: 82,
+      reasoning: 'Quadro típico de pirose pós-prandial sem sinais de alarme. Antiácido de ação tópica é primeira linha pra MIP.'
+    }
+  }
+];
+
+let selectedCaseId = 'F046';
+const decisionsLog = {};
+
+function renderPainel() {
+  renderQueue();
+  renderCaseDetail();
+  document.getElementById('queueCount').textContent = cases.length;
+}
+
+function renderQueue() {
+  const list = document.getElementById('queueList');
+  list.innerHTML = '';
+  cases.forEach(c => {
+    const item = document.createElement('div');
+    const isSelected = c.id === selectedCaseId;
+    const wasDecided = decisionsLog[c.id];
+
+    let bgClass = 'hover:bg-slate-50';
+    let badgeClass = 'bg-slate-400 text-white';
+    let badgeText = 'SEM SUGESTÃO';
+    let borderClass = '';
+
+    if (c.kind === 'redflag') {
+      bgClass = 'bg-red-50 hover:bg-red-100 border-l-4 border-red-500';
+      badgeClass = 'bg-red-600 text-white';
+      badgeText = 'RED FLAG';
+    } else if (c.kind === 'suggestion') {
+      bgClass = 'hover:bg-teal-50';
+      badgeClass = 'bg-teal-600 text-white';
+      badgeText = 'SUGESTÃO';
+    }
+
+    item.className = `queue-item p-4 ${bgClass} ${isSelected ? 'selected' : ''}`;
+    item.onclick = () => selectCase(c.id);
+
+    const decidedLabel = wasDecided ? `<div class="text-xs text-emerald-600 font-semibold mt-1">✓ Decidido (${wasDecided})</div>` : '';
+    const waitingLabel = wasDecided ? '' : `<div class="text-xs ${c.kind === 'redflag' ? 'text-red-600 font-semibold' : 'text-slate-600'} mt-1">⏱ Aguardando há ${c.waitingMin}min</div>`;
+
+    item.innerHTML = `
+      <div class="flex justify-between items-start mb-1">
+        <span class="font-bold ${c.kind === 'redflag' ? 'text-red-700' : isSelected ? 'text-teal-700' : 'text-slate-700'}">${c.id}</span>
+        <span class="text-xs ${badgeClass} px-2 py-0.5 rounded-full">${badgeText}</span>
+      </div>
+      <div class="text-sm text-slate-700">${c.label}</div>
+      <div class="text-xs text-slate-500">${c.title}</div>
+      ${decidedLabel}${waitingLabel}
+    `;
+    list.appendChild(item);
+  });
+}
+
+function selectCase(id) {
+  selectedCaseId = id;
+  renderQueue();
+  renderCaseDetail();
+}
+
+function renderCaseDetail() {
+  const c = cases.find(x => x.id === selectedCaseId);
+  if (!c) return;
+  const detail = document.getElementById('caseDetail');
+  const decided = decisionsLog[c.id];
+
+  let headerColor = 'bg-teal-600';
+  let badgeText = 'Com sugestão da IA';
+  let badgeColor = 'bg-white text-teal-700';
+
+  if (c.kind === 'redflag') {
+    headerColor = 'bg-red-600';
+    badgeText = '⚠ Red flag detectada';
+    badgeColor = 'bg-white text-red-700';
+  } else if (c.kind === 'no-suggestion') {
+    headerColor = 'bg-slate-600';
+    badgeText = 'IA sem confiança pra sugerir';
+    badgeColor = 'bg-white text-slate-700';
+  }
+
+  let suggestionBlock = '';
+  if (c.kind === 'redflag') {
+    suggestionBlock = `
+      <div class="bg-red-50 border border-red-300 rounded-xl p-4 mb-4">
+        <div class="font-semibold text-red-900 mb-2">Red flags detectadas (regras determinísticas)</div>
+        <ul class="text-sm text-slate-700 space-y-1">
+          ${c.redFlags.map(rf => `<li>🚩 ${rf}</li>`).join('')}
+        </ul>
+        <div class="text-xs text-red-700 mt-3 font-semibold">Recomendação automática: encaminhar ao médico. Não sugerir MIP.</div>
+      </div>`;
+  } else if (c.kind === 'no-suggestion') {
+    suggestionBlock = `
+      <div class="bg-slate-100 border border-slate-300 rounded-xl p-4 mb-4">
+        <div class="font-semibold text-slate-800 mb-2">A IA optou por não sugerir</div>
+        <div class="text-sm text-slate-700">${c.noSuggestionReason}</div>
+        <div class="text-xs text-slate-500 mt-2 italic">Decisão clínica integral com o farmacêutico.</div>
+      </div>`;
+  } else {
+    suggestionBlock = `
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+        <div class="text-sm">
+          <div class="font-semibold text-blue-900 mb-2">${c.suggestion.category}</div>
+          <div class="text-slate-700"><strong>Princípio ativo:</strong> ${c.suggestion.activeIngredient}</div>
+          <div class="text-slate-700"><strong>Confiança:</strong> ${c.suggestion.confidence}%</div>
+          <div class="text-xs text-slate-600 mt-2"><strong>Raciocínio:</strong> ${c.suggestion.reasoning}</div>
+          <div class="text-xs text-slate-500 mt-2 italic">Base MIP versão 2026.05.03</div>
+        </div>
+      </div>`;
+  }
+
+  let actionsBlock = '';
+  if (decided) {
+    actionsBlock = `
+      <div class="bg-emerald-50 border border-emerald-300 rounded-xl p-4 text-sm">
+        <div class="font-semibold text-emerald-900 mb-1">✓ Decisão registrada: ${decided}</div>
+        <div class="text-xs text-slate-600">Audit log atualizado. Caso encerrado.</div>
+        <button onclick="resetDecision('${c.id}')" class="mt-2 text-xs text-teal-700 underline">Reabrir caso</button>
+      </div>`;
+  } else if (c.kind === 'redflag') {
+    actionsBlock = `
+      <div class="space-y-2">
+        <button onclick="recordDecision('${c.id}', 'Encaminhado ao médico')" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-xl text-sm">
+          → Confirmar encaminhamento ao médico
+        </button>
+        <button onclick="recordDecision('${c.id}', 'Red flag descartada após avaliação')" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl text-sm">
+          ✎ Avaliar e prosseguir (registrar justificativa)
+        </button>
+      </div>`;
+  } else if (c.kind === 'suggestion') {
+    actionsBlock = `
+      <div class="space-y-2">
+        <button onclick="recordDecision('${c.id}', 'Sugestão aprovada')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm">
+          ✓ Aprovar sugestão
+        </button>
+        <button onclick="recordDecision('${c.id}', 'Sugestão substituída')" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl text-sm">
+          ✎ Substituir por outro MIP
+        </button>
+        <button onclick="recordDecision('${c.id}', 'Encaminhado ao médico')" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl text-sm">
+          → Encaminhar ao médico
+        </button>
+      </div>`;
+  } else {
+    actionsBlock = `
+      <div class="space-y-2">
+        <button onclick="recordDecision('${c.id}', 'MIP indicado pelo farmacêutico')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl text-sm">
+          ✓ Indicar MIP
+        </button>
+        <button onclick="recordDecision('${c.id}', 'Encaminhado ao médico')" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-semibold py-3 rounded-xl text-sm">
+          → Encaminhar ao médico
+        </button>
+      </div>`;
+  }
+
+  detail.innerHTML = `
+    <div class="${headerColor} text-white px-6 py-4 rounded-t-2xl flex items-center justify-between">
+      <div>
+        <div class="text-xs opacity-80">Caso atual</div>
+        <div class="text-xl font-bold">${c.id} — ${c.label}</div>
+      </div>
+      <span class="${badgeColor} font-semibold px-3 py-1.5 rounded-lg text-sm">${badgeText}</span>
+    </div>
+    <div class="p-6 grid grid-cols-2 gap-6">
+      <div>
+        <div class="text-xs uppercase text-slate-500 font-semibold mb-3">Dados do cliente</div>
+        <div class="space-y-2 text-sm">
+          <div><span class="text-slate-500">Idade:</span> <strong>${c.age} anos</strong></div>
+          <div><span class="text-slate-500">Sexo:</span> ${c.sexFull}</div>
+          <div><span class="text-slate-500">Gestante:</span> ${c.pregnant}</div>
+          <div><span class="text-slate-500">Alergias:</span> ${c.allergies}</div>
+          <div><span class="text-slate-500">Med. contínua:</span> ${c.meds}</div>
+        </div>
+        <div class="text-xs uppercase text-slate-500 font-semibold mb-3 mt-6">Sintomas relatados</div>
+        <div class="space-y-2 text-sm">
+          ${c.symptoms.map(s => `<div>• ${s}</div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="text-xs uppercase text-slate-500 font-semibold mb-3">${c.kind === 'redflag' ? 'Análise da IA' : c.kind === 'no-suggestion' ? 'Análise da IA' : 'Sugestão da IA'}</div>
+        ${suggestionBlock}
+        <div class="text-xs uppercase text-slate-500 font-semibold mb-3">Sua decisão</div>
+        ${actionsBlock}
+        ${!decided ? `
+          <div class="mt-4">
+            <div class="text-xs text-slate-500 mb-1">Observações (opcional)</div>
+            <textarea class="w-full border border-slate-200 rounded-lg p-2 text-sm" rows="2" placeholder="Notas pra audit log..."></textarea>
+          </div>` : ''}
+      </div>
+    </div>
+    <div class="bg-slate-50 px-6 py-3 rounded-b-2xl text-xs text-slate-500 flex items-center justify-between">
+      <span>📋 Toda decisão é registrada em audit log imutável</span>
+      <span>Caso aberto há ${c.openedMin}m</span>
+    </div>
+  `;
+}
+
+function recordDecision(id, action) {
+  decisionsLog[id] = action;
+  showToast(`Caso ${id}: ${action}`, 'success');
+  renderQueue();
+  renderCaseDetail();
+  // Auto-advance to next pending case
+  const next = cases.find(c => !decisionsLog[c.id] && c.id !== id);
+  if (next) {
+    setTimeout(() => selectCase(next.id), 1200);
+  }
+}
+
+function resetDecision(id) {
+  delete decisionsLog[id];
+  renderQueue();
+  renderCaseDetail();
+}
+
+function showToast(msg, type) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  const color = type === 'success' ? 'bg-emerald-600' : 'bg-slate-700';
+  t.className = `toast ${color} text-white px-4 py-3 rounded-xl shadow-lg text-sm font-medium`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 3200);
+}
+
+// Init
+showScreen('welcome');
+</script>
+
+</body>
+</html>
