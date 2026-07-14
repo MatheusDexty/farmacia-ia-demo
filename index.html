@@ -121,7 +121,7 @@
         <div class="font-semibold">Atendente Virtual</div>
         <div class="text-xs text-teal-100">Coletando informações pra o farmacêutico</div>
       </div>
-      <div class="ml-auto text-xs bg-white/20 px-2 py-1 rounded-full">Pergunta <span id="qNum">1</span> de 6</div>
+      <div class="ml-auto text-xs bg-white/20 px-2 py-1 rounded-full">Pergunta <span id="qNum">1</span> de <span id="qTotal">8</span></div>
     </div>
 
     <div id="chat" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50"></div>
@@ -171,8 +171,8 @@
         <div class="font-semibold text-blue-900">Sugestão preliminar (pendente de validação)</div>
       </div>
       <div class="text-slate-700">
-        <strong>Categoria:</strong> Analgésico simples<br>
-        <strong>Princípio ativo:</strong> Dipirona ou Paracetamol
+        <strong>1ª linha:</strong> Analgésico simples (Paracetamol)<br>
+        <span class="text-xs text-slate-500">O farmacêutico recebe a escada completa: se não melhorar, próximo passo é Dipirona, e assim por diante.</span>
       </div>
       <div class="text-xs text-slate-500 mt-2 italic">A indicação final é responsabilidade do farmacêutico.</div>
     </div>
@@ -303,18 +303,27 @@ function nameLabel(name) {
 
 // ============= ANAMNESE =============
 const conversation = [
-  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou te fazer algumas perguntas pra preparar uma ficha pro farmacêutico. Pode levar uns 2 minutinhos. Pra começar - o que você está sentindo hoje?",
-    options: ["Dor de cabeça", "Azia ou má digestão", "Gripe ou resfriado", "Dor muscular", "Outra coisa"] },
-  { bot: "Entendi, dor de cabeça. Há quanto tempo começou?",
-    options: ["Menos de 1 hora", "Algumas horas", "Desde ontem", "Há vários dias"] },
-  { bot: "E como você descreveria a intensidade?",
-    options: ["Leve - desconfortável", "Moderada - atrapalha", "Forte - não consigo continuar"] },
-  { bot: "Você tem algum desses sintomas junto com a dor?",
-    options: ["Não, só a dor", "Náusea ou enjoo", "Visão embaçada / luzes", "Febre"] },
-  { bot: "Você tem alguma alergia conhecida a medicamentos?",
-    options: ["Não tenho alergias", "Sim, dipirona", "Sim, anti-inflamatório", "Outras"] },
-  { bot: "Última pergunta: você toma algum remédio de uso contínuo? Ou está gestante / amamentando?",
-    options: ["Não tomo nada e não estou gestante", "Tomo remédio contínuo", "Estou gestante", "Estou amamentando"] }
+  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou fazer algumas perguntas rápidas pra preparar uma ficha pro farmacêutico. Pra começar - o que você está sentindo hoje?",
+    options: ["Dor de cabeça", "Febre", "Gripe ou resfriado", "Dor de garganta", "Tosse seca", "Tosse com catarro", "Azia ou queimação", "Náusea", "Diarreia", "Constipação", "Gases", "Cólica", "Dor muscular", "Rinite / alergia no nariz", "Alergia na pele"] },
+  { bot: "Entendi, dor de cabeça. Esse remédio é pra você mesmo ou pra outra pessoa?",
+    options: ["Pra mim", "Pra outra pessoa"] },
+  { bot: "Qual a faixa de idade de quem vai usar?",
+    options: ["Menos de 12", "18 a 29", "30 a 44", "45 a 59", "60 a 75"] },
+  { bot: "Tem alguma dessas condições de saúde? Pode marcar mais de uma.",
+    why: "Pressão alta, diabetes, glaucoma, próstata e baixa imunidade mudam quais remédios são seguros - por isso marque todas que tiver.",
+    options: ["Nenhuma", "Pressão alta", "Diabetes", "Glaucoma", "Gastrite", "Baixa imunidade"] },
+  { bot: "Tem alguma alergia conhecida a medicamento?",
+    why: "Alergia a remédio é contraindicação absoluta - nunca vou sugerir algo a que você seja alérgico.",
+    options: ["Não tenho alergias", "Dipirona", "Paracetamol", "Anti-inflamatório (AINE)"] },
+  { bot: "Há quanto tempo a dor começou?",
+    why: "Dor de cabeça que dura muitos dias ou muda de padrão precisa de avaliação, não de remédio de balcão.",
+    options: ["Menos de 1 hora", "Algumas horas", "Desde ontem", "Mais de 7 dias"] },
+  { bot: "Como você descreveria a intensidade?",
+    why: "Uma dor descrita como a pior da vida pode indicar algo grave e muda totalmente a conduta.",
+    options: ["Leve - desconfortável", "Moderada - atrapalha", "Forte - não consigo continuar", "A pior dor da minha vida"] },
+  { bot: "Já tomou alguma coisa pra essa dor?",
+    why: "Se você já tomou um analgésico e não resolveu, faz sentido considerar o próximo passo da escada.",
+    options: ["Não tomei nada", "Tomei paracetamol e não passou", "Tomei e melhorou um pouco"] }
 ];
 
 let currentQ = 0;
@@ -323,6 +332,7 @@ function startAnamnese() {
   currentQ = 0;
   document.getElementById('chat').innerHTML = '';
   document.getElementById('qNum').textContent = '1';
+  document.getElementById('qTotal').textContent = conversation.length;
   setTimeout(() => askQuestion(0), 300);
 }
 
@@ -334,8 +344,21 @@ function askQuestion(idx) {
   setTimeout(() => {
     hideTyping();
     addBotMessage(conversation[idx].bot);
+    if (conversation[idx].why) addWhyNote(conversation[idx].why);
     showOptions(conversation[idx].options, idx);
   }, 900);
+}
+
+function addWhyNote(text) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'flex items-start gap-2 pl-10 fade-in';
+  div.innerHTML = `
+    <div class="bg-teal-50 border border-teal-100 text-teal-800 rounded-2xl px-4 py-2 text-xs max-w-md flex items-start gap-2">
+      <span class="font-bold">?</span><span>${text}</span>
+    </div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 }
 
 function showTyping() {
@@ -425,8 +448,8 @@ let cases = [
       'Sem trauma recente'
     ],
     redFlags: [
-      'Cefaleia súbita em paciente >60 anos (regra RF-04)',
-      'Náusea associada a cefaleia intensa (regra RF-07)'
+      'Cefaleia que surge após os 50 anos (RF-CEF-04 · CAB 28 vol II p.32, Quadro 1)',
+      'Início súbito de forte intensidade (RF-CEF-01 · CAB 28 vol II p.32, Quadro 1)'
     ],
     suggestion: null
   },
@@ -442,10 +465,16 @@ let cases = [
       'Não tomou nada ainda'
     ],
     suggestion: {
-      category: 'Analgésico simples',
-      activeIngredient: 'Dipirona ou Paracetamol',
+      category: 'Analgésico simples (degrau 1 de 3)',
+      activeIngredient: 'Paracetamol 500-750mg',
       confidence: 87,
-      reasoning: 'Cefaleia leve sem sinais de gravidade, sem alergia, sem contraindicação por idade ou comorbidade. Categoria padrão pra MIP nessa apresentação.'
+      reasoning: 'Cefaleia leve sem sinais de alarme, sem alergia, sem contraindicação. 1ª linha da escada; paciente ainda não tentou nada.',
+      protocol: 'cefaleia',
+      escalation: [
+        'Paracetamol 500-750mg (1ª linha)',
+        'Dipirona 500mg-1g (2ª linha, se não melhorar)',
+        'Neosaldina (3ª linha, se sem contraindicação vascular)'
+      ]
     }
   },
   {
@@ -474,10 +503,16 @@ let cases = [
       'Sem disfagia'
     ],
     suggestion: {
-      category: 'Antiácido',
-      activeIngredient: 'Hidróxido de alumínio + magnésio, ou Carbonato de cálcio',
+      category: 'Antiácido (degrau 1 de 3)',
+      activeIngredient: 'Hidróxido de alumínio + magnésio',
       confidence: 82,
-      reasoning: 'Quadro típico de pirose pós-prandial sem sinais de alarme. Antiácido de ação tópica é primeira linha pra MIP.'
+      reasoning: 'Pirose pós-prandial sem sinais de alarme. Antiácido de ação tópica é 1ª linha.',
+      protocol: 'azia',
+      escalation: [
+        'Antiácido Al + Mg (1ª linha)',
+        'Alginato de sódio (2ª linha, se não melhorar)',
+        'Famotidina - antagonista H2 (3ª linha)'
+      ]
     }
   }
 ];
@@ -577,6 +612,19 @@ function renderCaseDetail() {
         <div class="text-xs text-slate-500 mt-2 italic">Decisão clínica integral com o farmacêutico.</div>
       </div>`;
   } else {
+    const ladder = c.suggestion.escalation ? `
+      <div class="mt-3 border-t border-blue-200 pt-3">
+        <div class="text-xs font-semibold text-blue-900 mb-2">Escada terapêutica (protocolo: ${c.suggestion.protocol})</div>
+        <div class="space-y-1">
+          ${c.suggestion.escalation.map((s, i) => `
+            <div class="flex items-center gap-2 text-xs ${i === 0 ? 'text-teal-800 font-semibold' : 'text-slate-500'}">
+              <span class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${i === 0 ? 'bg-teal-600 text-white' : 'bg-slate-200 text-slate-600'}">${i + 1}</span>
+              <span>${s}</span>
+              ${i === 0 ? '<span class="ml-1 bg-teal-100 text-teal-700 px-1.5 rounded whitespace-nowrap">recomendado</span>' : ''}
+            </div>`).join('')}
+          <div class="text-xs text-slate-400 pl-1">↓ persistência → farmacêutico → médico</div>
+        </div>
+      </div>` : '';
     suggestionBlock = `
       <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
         <div class="text-sm">
@@ -584,7 +632,8 @@ function renderCaseDetail() {
           <div class="text-slate-700"><strong>Princípio ativo:</strong> ${c.suggestion.activeIngredient}</div>
           <div class="text-slate-700"><strong>Confiança:</strong> ${c.suggestion.confidence}%</div>
           <div class="text-xs text-slate-600 mt-2"><strong>Raciocínio:</strong> ${c.suggestion.reasoning}</div>
-          <div class="text-xs text-slate-500 mt-2 italic">Base MIP versão 2026.05.03</div>
+          ${ladder}
+          <div class="text-xs text-slate-500 mt-2 italic">Base de protocolos 2026.07.01 · rascunho requer validação</div>
         </div>
       </div>`;
   }
