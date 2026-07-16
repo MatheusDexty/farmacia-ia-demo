@@ -335,15 +335,15 @@ const conversation = [
   { bot: "Tem alguma alergia conhecida a medicamento?",
     why: "Alergia a remédio é contraindicação absoluta.",
     options: ["Não tenho alergias", "Dipirona", "Paracetamol", "Anti-inflamatório (AINE)"] },
-  { bot: "Há quanto tempo a dor começou?",
-    why: "Dor que dura muitos dias ou muda de padrão precisa de avaliação.",
-    options: ["Menos de 1 hora", "Algumas horas", "Desde ontem", "Mais de 7 dias"] },
-  { bot: "Como você descreveria a intensidade?",
-    why: "Uma dor 'a pior da vida' pode indicar algo grave.",
-    options: ["Leve - desconfortável", "Moderada - atrapalha", "Forte - não consigo continuar", "A pior dor da minha vida"] },
-  { bot: "Já tomou alguma coisa pra essa dor?",
-    why: "Se já tomou um analgésico e não resolveu, faz sentido o próximo passo.",
-    options: ["Não tomei nada", "Tomei paracetamol e não passou", "Tomei e melhorou um pouco"] }
+  { bot: "Há quanto tempo você está com isso?",
+    why: "Sintoma que dura muitos dias ou muda de padrão precisa de avaliação.",
+    options: ["Menos de 1 dia", "Alguns dias", "Cerca de uma semana", "Mais de duas semanas"] },
+  { bot: "Como está o incômodo?",
+    why: "A intensidade ajuda a decidir a conduta e a identificar sinais mais sérios.",
+    options: ["Leve - dá pra levar", "Moderado - atrapalha", "Forte - atrapalha bastante", "Muito forte / insuportável"] },
+  { bot: "Já tentou alguma coisa pra isso?",
+    why: "Se já tentou algo e não resolveu, faz sentido pensar no próximo passo.",
+    options: ["Não tentei nada", "Tentei e não resolveu", "Tentei e melhorou um pouco"] }
 ];
 
 let currentQ = 0;
@@ -359,11 +359,10 @@ const ic = {
   pill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a5 5 0 0 0-7-7l-10 10a5 5 0 0 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>'
 };
 const CATEGORIES = [
-  { title: 'Dores e febre', icon: ic.febre, items: ['Dor de cabeça', 'Febre', 'Dor muscular', 'Cólica'] },
-  { title: 'Gripe, nariz e garganta', icon: ic.ar, items: ['Gripe ou resfriado', 'Dor de garganta', 'Tosse seca', 'Tosse com catarro', 'Rinite'] },
-  { title: 'Estômago e intestino', icon: ic.barriga, items: ['Azia ou queimação', 'Náusea', 'Diarreia', 'Constipação', 'Gases', 'Hemorroidas', 'Falta de apetite'] },
-  { title: 'Pele', icon: ic.pele, items: ['Alergia na pele', 'Micose', 'Acne', 'Aftas', 'Assadura', 'Pele seca', 'Melasma', 'Rosácea'] },
-  { title: 'Ouvido, cabelo e ferimentos', icon: ic.curativo, items: ['Dor de ouvido', 'Caspa', 'Queda de cabelo', 'Ferimentos e torções'] },
+  { title: 'Dor, febre e machucados', icon: ic.febre, items: ['Dor de cabeça', 'Febre', 'Dor muscular', 'Cólica', 'Ferimentos e torções'] },
+  { title: 'Gripe, garganta e ouvido', icon: ic.ar, items: ['Gripe ou resfriado', 'Dor de garganta', 'Tosse seca', 'Tosse com catarro', 'Nariz alérgico (rinite)', 'Dor de ouvido'] },
+  { title: 'Estômago e intestino', icon: ic.barriga, items: ['Azia ou queimação', 'Enjoo / náusea', 'Diarreia', 'Intestino preso', 'Gases', 'Hemorroidas', 'Falta de apetite'] },
+  { title: 'Pele e cabelo', icon: ic.pele, items: ['Alergia / coceira na pele', 'Micose (frieira, pano branco)', 'Espinhas / acne', 'Afta na boca', 'Assadura', 'Pele ressecada', 'Manchas na pele (melasma)', 'Vermelhidão no rosto (rosácea)', 'Caspa', 'Queda de cabelo'] },
   { title: 'Vitaminas e cuidados', icon: ic.pill, accent: 'amber', items: ['Vitaminas e suplementos', 'Filtro solar'] }
 ];
 
