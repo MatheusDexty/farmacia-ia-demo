@@ -55,6 +55,8 @@
   /* esconde a barra de rolagem horizontal das pilhas de navegacao */
   .nav-scroll::-webkit-scrollbar { display: none; }
   .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+  /* tamanho dos icones de categoria (confiavel, nao depende do JIT do CDN) */
+  #catGroups svg { width: 20px; height: 20px; }
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -73,7 +75,7 @@
     </div>
     <div class="nav-scroll flex gap-1.5 overflow-x-auto px-4 pb-2.5 sm:py-3 sm:px-0">
       <button onclick="showScreen('welcome')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">1. Boas-vindas</button>
-      <button onclick="showScreen('anamnese')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">2. Anamnese</button>
+      <button onclick="showScreen('categorias')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">2. Anamnese</button>
       <button onclick="showScreen('ficha')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">3. Ficha</button>
       <button onclick="showScreen('redflag')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">4. Red Flag</button>
       <button onclick="showScreen('painel')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">5. Painel</button>
@@ -111,11 +113,21 @@
       <p>Suas respostas são tratadas como dado de saúde sensível. Usamos só pra te atender, com criptografia e exclusão automática conforme nossa política. Seus dados não são compartilhados com terceiros.</p>
     </div>
 
-    <button onclick="showScreen('anamnese')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-xl text-lg transition">
+    <button onclick="showScreen('categorias')" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-4 rounded-xl text-lg transition">
       Começar →
     </button>
 
     <p class="text-center text-xs text-slate-400 mt-4 leading-relaxed">Ao tocar em "Começar", você concorda com os <a href="#" class="underline">termos de uso</a> e a <a href="#" class="underline">política de privacidade</a>, e confirma que as informações são verdadeiras.<br>Atendimento humano disponível a qualquer momento.</p>
+  </div>
+</div>
+
+<!-- Screen 1.5: Categorias (escolha do sintoma, agrupado) -->
+<div id="categorias" class="screen hidden min-h-[calc(100vh-60px)] p-4 sm:p-6 fade-in">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mt-2">O que você está sentindo?</h1>
+    <p class="text-center text-slate-500 mb-6 sm:mb-8 mt-1">Toque na opção mais parecida. O farmacêutico confere tudo depois.</p>
+    <div id="catGroups" class="space-y-6"></div>
+    <p class="text-center text-xs text-slate-400 mt-8">Não encontrou? Um atendente pode te ajudar a qualquer momento.</p>
   </div>
 </div>
 
@@ -287,7 +299,7 @@
 </div>
 
 <script>
-const screens = ['welcome', 'anamnese', 'ficha', 'redflag', 'painel'];
+const screens = ['welcome', 'categorias', 'anamnese', 'ficha', 'redflag', 'painel'];
 
 function showScreen(name) {
   screens.forEach(s => {
@@ -299,20 +311,21 @@ function showScreen(name) {
     b.classList.remove('active');
     if (b.textContent.toLowerCase().includes(nameLabel(name))) b.classList.add('active');
   });
+  if (name === 'categorias') renderCategorias();
   if (name === 'anamnese') startAnamnese();
   if (name === 'painel') renderPainel();
   window.scrollTo(0, 0);
 }
 
 function nameLabel(name) {
-  return { welcome: 'boas', anamnese: 'anamnese', ficha: 'ficha', redflag: 'red', painel: 'painel' }[name];
+  return { welcome: 'boas', categorias: 'anamnese', anamnese: 'anamnese', ficha: 'ficha', redflag: 'red', painel: 'painel' }[name];
 }
 
 // ============= ANAMNESE =============
 const conversation = [
   { bot: "Oi! Eu sou o atendente virtual da farmácia. Cubro mais de 30 tipos de queixa e cuidado. Pra começar - o que você está sentindo hoje? (nesta demonstração, seguimos o fluxo da dor de cabeça)",
     options: ["Dor de cabeça", "Febre", "Gripe ou resfriado", "Dor de garganta", "Tosse seca", "Tosse com catarro", "Azia ou queimação", "Náusea", "Diarreia", "Constipação", "Gases", "Cólica", "Dor muscular", "Rinite", "Alergia na pele", "Dor de ouvido", "Aftas", "Hemorroidas", "Micose", "Ferimentos e torções", "Acne", "Assadura", "Caspa", "Vitaminas e suplementos", "Pele seca", "Filtro solar", "Melasma", "Rosácea", "Queda de cabelo", "Falta de apetite"] },
-  { bot: "Entendi, dor de cabeça. Esse remédio é pra você mesmo ou pra outra pessoa?",
+  { bot: "Esse remédio é pra você mesmo ou pra outra pessoa?",
     options: ["Pra mim", "Pra outra pessoa"] },
   { bot: "Qual a faixa de idade de quem vai usar?",
     options: ["Menos de 12", "18 a 29", "30 a 44", "45 a 59", "60 a 75"] },
@@ -334,19 +347,74 @@ const conversation = [
 ];
 
 let currentQ = 0;
+let chosenSymptom = null;
+
+// ============= CATEGORIAS (escolha do sintoma, agrupada por ícones) =============
+const ic = {
+  febre: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V5a2 2 0 1 0-4 0v9.76a4 4 0 1 0 4 0z"/></svg>',
+  ar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h9a2.5 2.5 0 1 0-2.5-2.5"/><path d="M2 12h14a2.5 2.5 0 1 1-2.5 2.5"/><path d="M2 16h7"/></svg>',
+  barriga: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M9 4c-.5 1 .5 1.5 0 2.5M13 4c-.5 1 .5 1.5 0 2.5"/></svg>',
+  pele: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5s5.5 5.6 5.5 9.5a5.5 5.5 0 0 1-11 0c0-3.9 5.5-9.5 5.5-9.5z"/></svg>',
+  curativo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><g transform="rotate(45 12 12)"><rect x="3" y="8.5" width="18" height="7" rx="3.5"/><circle cx="10" cy="10.8" r=".6" fill="currentColor" stroke="none"/><circle cx="14" cy="10.8" r=".6" fill="currentColor" stroke="none"/><circle cx="10" cy="13.2" r=".6" fill="currentColor" stroke="none"/><circle cx="14" cy="13.2" r=".6" fill="currentColor" stroke="none"/></g></svg>',
+  pill: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a5 5 0 0 0-7-7l-10 10a5 5 0 0 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>'
+};
+const CATEGORIES = [
+  { title: 'Dores e febre', icon: ic.febre, items: ['Dor de cabeça', 'Febre', 'Dor muscular', 'Cólica'] },
+  { title: 'Gripe, nariz e garganta', icon: ic.ar, items: ['Gripe ou resfriado', 'Dor de garganta', 'Tosse seca', 'Tosse com catarro', 'Rinite'] },
+  { title: 'Estômago e intestino', icon: ic.barriga, items: ['Azia ou queimação', 'Náusea', 'Diarreia', 'Constipação', 'Gases', 'Hemorroidas', 'Falta de apetite'] },
+  { title: 'Pele', icon: ic.pele, items: ['Alergia na pele', 'Micose', 'Acne', 'Aftas', 'Assadura', 'Pele seca', 'Melasma', 'Rosácea'] },
+  { title: 'Ouvido, cabelo e ferimentos', icon: ic.curativo, items: ['Dor de ouvido', 'Caspa', 'Queda de cabelo', 'Ferimentos e torções'] },
+  { title: 'Vitaminas e cuidados', icon: ic.pill, accent: 'amber', items: ['Vitaminas e suplementos', 'Filtro solar'] }
+];
+
+function renderCategorias() {
+  const wrap = document.getElementById('catGroups');
+  wrap.innerHTML = CATEGORIES.map(g => {
+    const badge = g.accent === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-teal-50 text-teal-700';
+    const buttons = g.items.map(it =>
+      `<button onclick="pickSymptom('${it.replace(/'/g, "\\'")}')" class="text-left bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50 active:bg-teal-100 rounded-2xl px-4 py-3.5 text-base font-medium text-slate-800 shadow-sm transition">${it}</button>`
+    ).join('');
+    return `<section>
+      <div class="flex items-center gap-2.5 mb-3">
+        <div class="w-9 h-9 rounded-xl ${badge} flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${g.icon}</div>
+        <h2 class="font-semibold text-slate-700">${g.title}</h2>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">${buttons}</div>
+    </section>`;
+  }).join('');
+}
+
+function pickSymptom(sym) {
+  chosenSymptom = sym;
+  showScreen('anamnese');
+}
 
 function startAnamnese() {
-  currentQ = 0;
   document.getElementById('chat').innerHTML = '';
+  const total = chosenSymptom ? conversation.length - 1 : conversation.length;
+  document.getElementById('qTotal').textContent = total;
   document.getElementById('qNum').textContent = '1';
-  document.getElementById('qTotal').textContent = conversation.length;
-  setTimeout(() => askQuestion(0), 300);
+  if (chosenSymptom) {
+    currentQ = 1;
+    setTimeout(() => {
+      showTyping();
+      setTimeout(() => {
+        hideTyping();
+        addBotMessage('Oi! Vou fazer algumas perguntas rápidas pra preparar sua ficha.');
+        addUserMessage(chosenSymptom);
+        setTimeout(() => askQuestion(1), 550);
+      }, 700);
+    }, 300);
+  } else {
+    currentQ = 0;
+    setTimeout(() => askQuestion(0), 300);
+  }
 }
 
 function askQuestion(idx) {
   if (idx >= conversation.length) { finishAnamnese(); return; }
   currentQ = idx;
-  document.getElementById('qNum').textContent = idx + 1;
+  document.getElementById('qNum').textContent = chosenSymptom ? idx : idx + 1;
   showTyping();
   setTimeout(() => {
     hideTyping();
