@@ -45,12 +45,16 @@
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(-20px); }
   }
-  /* Altura do card de chat: confiável (nao depende do JIT do CDN p/ dvh).
-     Desktop 85vh; mobile preenche a tela usando dvh (com fallback vh). */
-  .chat-card { height: 85vh; height: 85dvh; }
-  @media (max-width: 640px) {
-    .chat-card { height: calc(100vh - 4.75rem); height: calc(100dvh - 4.75rem); }
+  /* Chat: no MOBILE usa min-height (preenche a tela mas PODE crescer com o
+     conteudo - nunca sobrepoe, mesmo em navegador in-app que erra o dvh).
+     No DESKTOP vira o card de chat de 85vh. */
+  .chat-card { min-height: calc(100vh - 6rem); min-height: calc(100dvh - 6rem); }
+  @media (min-width: 641px) {
+    .chat-card { min-height: 0; height: 85vh; height: 85dvh; }
   }
+  /* esconde a barra de rolagem horizontal das pilhas de navegacao */
+  .nav-scroll::-webkit-scrollbar { display: none; }
+  .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -58,20 +62,22 @@
 <div id="toastContainer" class="fixed top-20 right-6 z-50 space-y-2"></div>
 
 <!-- Top Navigation (demo only) -->
-<div class="bg-slate-900 text-white px-6 py-3 flex items-center justify-between sticky top-0 z-40">
-  <div class="flex items-center gap-3">
-    <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center font-bold">F</div>
-    <div>
-      <div class="font-semibold">FarmacIA</div>
-      <div class="text-xs text-slate-400">Mockup demonstrativo - não é produto final</div>
+<div class="bg-slate-900 text-white sticky top-0 z-40">
+  <div class="sm:flex sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+    <div class="flex items-center gap-2.5 px-4 pt-2.5 pb-1.5 sm:py-3 flex-shrink-0">
+      <div class="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center font-bold flex-shrink-0">F</div>
+      <div class="leading-tight min-w-0">
+        <div class="font-semibold text-sm sm:text-base">FarmacIA</div>
+        <div class="text-[11px] text-slate-400 truncate">Mockup demonstrativo</div>
+      </div>
     </div>
-  </div>
-  <div class="flex gap-2 text-sm">
-    <button onclick="showScreen('welcome')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">1. Boas-vindas</button>
-    <button onclick="showScreen('anamnese')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">2. Anamnese</button>
-    <button onclick="showScreen('ficha')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">3. Ficha</button>
-    <button onclick="showScreen('redflag')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">4. Red Flag</button>
-    <button onclick="showScreen('painel')" class="nav-pill px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600">5. Painel</button>
+    <div class="nav-scroll flex gap-1.5 overflow-x-auto px-4 pb-2.5 sm:py-3 sm:px-0">
+      <button onclick="showScreen('welcome')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">1. Boas-vindas</button>
+      <button onclick="showScreen('anamnese')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">2. Anamnese</button>
+      <button onclick="showScreen('ficha')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">3. Ficha</button>
+      <button onclick="showScreen('redflag')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">4. Red Flag</button>
+      <button onclick="showScreen('painel')" class="nav-pill flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-700 hover:bg-slate-600 text-xs sm:text-sm">5. Painel</button>
+    </div>
   </div>
 </div>
 
@@ -114,7 +120,7 @@
 </div>
 
 <!-- Screen 2: Anamnese (chat) -->
-<div id="anamnese" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-2 sm:p-6">
+<div id="anamnese" class="screen hidden min-h-[calc(100vh-60px)] flex items-start sm:items-center justify-center p-2 sm:p-6">
   <div class="chat-card bg-white rounded-2xl sm:rounded-3xl shadow-xl max-w-2xl w-full overflow-hidden fade-in flex flex-col">
     <div class="bg-teal-600 text-white p-4 flex items-center gap-3 flex-shrink-0">
       <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">IA</div>
@@ -127,7 +133,7 @@
 
     <div id="chat" class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-50"></div>
 
-    <div id="inputArea" class="p-3 sm:p-4 bg-white border-t flex-shrink-0 max-h-[50vh] overflow-y-auto">
+    <div id="inputArea" class="p-3 sm:p-4 bg-white border-t flex-shrink-0 sm:max-h-[50vh] sm:overflow-y-auto">
       <div id="quickReplies" class="flex flex-wrap gap-2"></div>
     </div>
   </div>
