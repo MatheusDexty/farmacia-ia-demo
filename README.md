@@ -22,8 +22,9 @@ Deixou de ser um chatbot de poucas categorias e virou um **motor de protocolos
 clínicos**: cada sintoma é um protocolo com perguntas próprias, red flags e uma
 escada terapêutica.
 
-- **Muitos protocolos** - dor de cabeça, febre, gripe, dor de garganta, tosse,
-  azia, náusea, diarreia, constipação, gases, cólica, dor muscular, rinite, alergia
+- **30 protocolos**, cobrindo o livro "O Farma Raiz" inteiro - de dor de cabeça,
+  febre e gripe a dor de ouvido, hemorroidas, micose, acne e cuidados (suplementos,
+  filtro solar). Divididos em triagem de sintoma e orientação de produto
 - **Anamnese dinâmica** - as próximas perguntas se adaptam às respostas
 - **Explicação das perguntas** - a IA diz por que está perguntando (mais confiança)
 - **Escalonamento terapêutico** - 1ª linha, 2ª linha, 3ª linha; se não melhorar,

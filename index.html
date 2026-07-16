@@ -91,6 +91,11 @@
       </ol>
     </div>
 
+    <div class="bg-teal-50 border border-teal-100 rounded-xl p-4 mb-6 text-sm text-teal-900">
+      <div class="font-semibold mb-1">De onde vêm as recomendações</div>
+      <p>O raciocínio de cada queixa segue o livro <strong>"O Farma Raiz"</strong> (30 anos de balcão), e os fatos clínicos (sinais de alerta, doses, contraindicações) são ancorados em fontes oficiais: <strong>Bulário ANVISA</strong>, <strong>CAB 28 do Ministério da Saúde</strong> e a lista de MIPs da ANVISA.</p>
+    </div>
+
     <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 text-sm text-slate-700">
       <div class="font-semibold text-amber-900 mb-1.5 flex items-center gap-2">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z"/></svg>
@@ -303,8 +308,8 @@ function nameLabel(name) {
 
 // ============= ANAMNESE =============
 const conversation = [
-  { bot: "Oi! Eu sou o atendente virtual da farmácia. Vou fazer algumas perguntas rápidas pra preparar uma ficha pro farmacêutico. Pra começar - o que você está sentindo hoje?",
-    options: ["Dor de cabeça", "Febre", "Gripe ou resfriado", "Dor de garganta", "Tosse seca", "Tosse com catarro", "Azia ou queimação", "Náusea", "Diarreia", "Constipação", "Gases", "Cólica", "Dor muscular", "Rinite / alergia no nariz", "Alergia na pele"] },
+  { bot: "Oi! Eu sou o atendente virtual da farmácia. Cubro mais de 30 tipos de queixa e cuidado. Pra começar - o que você está sentindo hoje? (nesta demonstração, seguimos o fluxo da dor de cabeça)",
+    options: ["Dor de cabeça", "Febre", "Gripe ou resfriado", "Dor de garganta", "Tosse seca", "Tosse com catarro", "Azia ou queimação", "Náusea", "Diarreia", "Constipação", "Gases", "Cólica", "Dor muscular", "Rinite", "Alergia na pele", "Dor de ouvido", "Aftas", "Hemorroidas", "Micose", "Ferimentos e torções", "Acne", "Assadura", "Caspa", "Vitaminas e suplementos", "Pele seca", "Filtro solar", "Melasma", "Rosácea", "Queda de cabelo", "Falta de apetite"] },
   { bot: "Entendi, dor de cabeça. Esse remédio é pra você mesmo ou pra outra pessoa?",
     options: ["Pra mim", "Pra outra pessoa"] },
   { bot: "Qual a faixa de idade de quem vai usar?",
