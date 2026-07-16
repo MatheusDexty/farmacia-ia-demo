@@ -45,6 +45,12 @@
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(-20px); }
   }
+  /* Altura do card de chat: confiável (nao depende do JIT do CDN p/ dvh).
+     Desktop 85vh; mobile preenche a tela usando dvh (com fallback vh). */
+  .chat-card { height: 85vh; height: 85dvh; }
+  @media (max-width: 640px) {
+    .chat-card { height: calc(100vh - 4.75rem); height: calc(100dvh - 4.75rem); }
+  }
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -70,8 +76,8 @@
 </div>
 
 <!-- Screen 1: Welcome / LGPD -->
-<div id="welcome" class="screen min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
-  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+<div id="welcome" class="screen min-h-[calc(100vh-60px)] flex items-center justify-center p-3 sm:p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-6 sm:p-10 fade-in">
     <div class="text-center mb-8">
       <div class="w-20 h-20 bg-teal-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
         <svg class="w-10 h-10 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,9 +114,9 @@
 </div>
 
 <!-- Screen 2: Anamnese (chat) -->
-<div id="anamnese" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
-  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full overflow-hidden fade-in flex flex-col" style="height: 85vh;">
-    <div class="bg-teal-600 text-white p-4 flex items-center gap-3">
+<div id="anamnese" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-2 sm:p-6">
+  <div class="chat-card bg-white rounded-2xl sm:rounded-3xl shadow-xl max-w-2xl w-full overflow-hidden fade-in flex flex-col">
+    <div class="bg-teal-600 text-white p-4 flex items-center gap-3 flex-shrink-0">
       <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">IA</div>
       <div>
         <div class="font-semibold">Atendente Virtual</div>
@@ -119,17 +125,17 @@
       <div class="ml-auto text-xs bg-white/20 px-2 py-1 rounded-full">Pergunta <span id="qNum">1</span> de <span id="qTotal">8</span></div>
     </div>
 
-    <div id="chat" class="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50"></div>
+    <div id="chat" class="flex-1 min-h-0 overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-50"></div>
 
-    <div id="inputArea" class="p-4 bg-white border-t">
+    <div id="inputArea" class="p-3 sm:p-4 bg-white border-t flex-shrink-0 max-h-[50vh] overflow-y-auto">
       <div id="quickReplies" class="flex flex-wrap gap-2"></div>
     </div>
   </div>
 </div>
 
 <!-- Screen 3: Ficha generated -->
-<div id="ficha" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
-  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+<div id="ficha" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-3 sm:p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-6 sm:p-10 fade-in">
     <div class="text-center mb-6">
       <div class="w-20 h-20 bg-emerald-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
         <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,8 +189,8 @@
 </div>
 
 <!-- Screen 4: Red Flag -->
-<div id="redflag" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
-  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-10 fade-in">
+<div id="redflag" class="screen hidden min-h-[calc(100vh-60px)] flex items-center justify-center p-3 sm:p-6">
+  <div class="bg-white rounded-3xl shadow-xl max-w-2xl w-full p-6 sm:p-10 fade-in">
     <div class="text-center mb-6">
       <div class="w-20 h-20 bg-red-100 rounded-2xl mx-auto flex items-center justify-center mb-4">
         <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,32 +238,32 @@
 </div>
 
 <!-- Screen 5: Pharmacist panel -->
-<div id="painel" class="screen hidden min-h-[calc(100vh-60px)] p-6 fade-in">
+<div id="painel" class="screen hidden min-h-[calc(100vh-60px)] p-3 sm:p-6 fade-in">
   <div class="max-w-7xl mx-auto">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
       <div>
-        <h1 class="text-2xl font-bold text-slate-800">Painel do Farmacêutico</h1>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-800">Painel do Farmacêutico</h1>
         <p class="text-slate-600 text-sm">Dra. Ana Souza - CRF/SP 12345 • Farmácia São José</p>
       </div>
-      <div class="flex gap-3">
-        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+      <div class="grid grid-cols-3 sm:flex gap-2 sm:gap-3">
+        <div class="bg-white rounded-xl px-3 sm:px-4 py-3 shadow-sm">
           <div class="text-xs text-slate-500">Casos hoje</div>
-          <div class="text-2xl font-bold text-slate-800" id="statCases">23</div>
+          <div class="text-xl sm:text-2xl font-bold text-slate-800" id="statCases">23</div>
         </div>
-        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+        <div class="bg-white rounded-xl px-3 sm:px-4 py-3 shadow-sm">
           <div class="text-xs text-slate-500">Tempo médio</div>
-          <div class="text-2xl font-bold text-emerald-600">1m 24s</div>
+          <div class="text-xl sm:text-2xl font-bold text-emerald-600">1m 24s</div>
         </div>
-        <div class="bg-white rounded-xl px-4 py-3 shadow-sm">
+        <div class="bg-white rounded-xl px-3 sm:px-4 py-3 shadow-sm">
           <div class="text-xs text-slate-500">Aprovação IA</div>
-          <div class="text-2xl font-bold text-teal-600">78%</div>
+          <div class="text-xl sm:text-2xl font-bold text-teal-600">78%</div>
         </div>
       </div>
     </div>
 
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <!-- Queue -->
-      <div class="col-span-4 bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div class="lg:col-span-4 bg-white rounded-2xl shadow-sm overflow-hidden">
         <div class="bg-slate-100 px-4 py-3 font-semibold text-slate-700 flex items-center justify-between">
           <span>Fila de atendimento</span>
           <span class="bg-teal-600 text-white text-xs px-2 py-0.5 rounded-full" id="queueCount">4</span>
@@ -269,7 +275,7 @@
       </div>
 
       <!-- Case detail -->
-      <div class="col-span-8 bg-white rounded-2xl shadow-sm" id="caseDetail"></div>
+      <div class="lg:col-span-8 bg-white rounded-2xl shadow-sm" id="caseDetail"></div>
     </div>
   </div>
 </div>
@@ -684,7 +690,7 @@ function renderCaseDetail() {
       </div>
       <span class="${badgeColor} font-semibold px-3 py-1.5 rounded-lg text-sm">${badgeText}</span>
     </div>
-    <div class="p-6 grid grid-cols-2 gap-6">
+    <div class="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
       <div>
         <div class="text-xs uppercase text-slate-500 font-semibold mb-3">Dados do cliente</div>
         <div class="space-y-2 text-sm">
