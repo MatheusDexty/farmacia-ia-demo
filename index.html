@@ -55,8 +55,11 @@
   /* esconde a barra de rolagem horizontal das pilhas de navegacao */
   .nav-scroll::-webkit-scrollbar { display: none; }
   .nav-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-  /* tamanho dos icones de categoria (confiavel, nao depende do JIT do CDN) */
+  /* tamanho dos icones (confiavel, nao depende do JIT do CDN) */
   #catGroups svg { width: 20px; height: 20px; }
+  #catGroups .catic svg { width: 22px; height: 22px; }
+  #catGroups .catchev svg { width: 18px; height: 18px; }
+  #catGroups .catback svg { width: 17px; height: 17px; }
 </style>
 </head>
 <body class="bg-slate-100 min-h-screen">
@@ -125,7 +128,7 @@
 <div id="categorias" class="screen hidden min-h-[calc(100vh-60px)] p-4 sm:p-6 fade-in">
   <div class="max-w-3xl mx-auto">
     <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mt-2">O que você está sentindo?</h1>
-    <p class="text-center text-slate-500 mb-6 sm:mb-8 mt-1">Toque na opção mais parecida. O farmacêutico confere tudo depois.</p>
+    <p id="catSub" class="text-center text-slate-500 mb-6 sm:mb-8 mt-1">Toque na área mais parecida com o que você sente. O farmacêutico confere tudo depois.</p>
     <div id="catGroups" class="space-y-6"></div>
     <p class="text-center text-xs text-slate-400 mt-8">Não encontrou? Um atendente pode te ajudar a qualquer momento.</p>
   </div>
@@ -311,7 +314,7 @@ function showScreen(name) {
     b.classList.remove('active');
     if (b.textContent.toLowerCase().includes(nameLabel(name))) b.classList.add('active');
   });
-  if (name === 'categorias') renderCategorias();
+  if (name === 'categorias') { currentGroup = null; renderCategorias(); }
   if (name === 'anamnese') startAnamnese();
   if (name === 'painel') renderPainel();
   window.scrollTo(0, 0);
@@ -366,22 +369,48 @@ const CATEGORIES = [
   { title: 'Vitaminas e cuidados', icon: ic.pill, accent: 'amber', items: ['Vitaminas e suplementos', 'Filtro solar'] }
 ];
 
+let currentGroup = null;
+const chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+const backArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
+
+// Dois níveis: nível 1 = grupos (cards); nível 2 = sintomas do grupo escolhido.
 function renderCategorias() {
   const wrap = document.getElementById('catGroups');
-  wrap.innerHTML = CATEGORIES.map(g => {
+  const sub = document.getElementById('catSub');
+  if (currentGroup === null) {
+    if (sub) sub.textContent = 'Toque na área mais parecida com o que você sente. O farmacêutico confere tudo depois.';
+    wrap.className = 'grid grid-cols-1 sm:grid-cols-2 gap-3';
+    wrap.innerHTML = CATEGORIES.map((g, i) => {
+      const badge = g.accent === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-teal-50 text-teal-700';
+      const ex = g.items.slice(0, 3).map(s => s.replace(/\s*\(.*\)/, '')).join(', ');
+      return `<button onclick="openGroup(${i})" class="w-full text-left bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50 active:bg-teal-100 rounded-2xl p-4 shadow-sm transition flex items-center gap-3.5">
+        <div class="catic w-12 h-12 rounded-xl ${badge} flex items-center justify-center flex-shrink-0">${g.icon}</div>
+        <div class="min-w-0 flex-1">
+          <div class="font-semibold text-slate-800">${g.title}</div>
+          <div class="text-sm text-slate-500 truncate">${ex}...</div>
+        </div>
+        <span class="catchev text-slate-300 flex-shrink-0">${chevron}</span>
+      </button>`;
+    }).join('');
+  } else {
+    const g = CATEGORIES[currentGroup];
     const badge = g.accent === 'amber' ? 'bg-amber-50 text-amber-700' : 'bg-teal-50 text-teal-700';
+    if (sub) sub.textContent = 'Toque na opção mais parecida. O farmacêutico confere tudo depois.';
+    wrap.className = '';
     const buttons = g.items.map(it =>
       `<button onclick="pickSymptom('${it.replace(/'/g, "\\'")}')" class="text-left bg-white border border-slate-200 hover:border-teal-500 hover:bg-teal-50 active:bg-teal-100 rounded-2xl px-4 py-3.5 text-base font-medium text-slate-800 shadow-sm transition">${it}</button>`
     ).join('');
-    return `<section>
-      <div class="flex items-center gap-2.5 mb-3">
-        <div class="w-9 h-9 rounded-xl ${badge} flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5">${g.icon}</div>
-        <h2 class="font-semibold text-slate-700">${g.title}</h2>
+    wrap.innerHTML = `
+      <button onclick="backToGroups()" class="catback inline-flex items-center gap-1 text-teal-700 font-medium mb-3">${backArrow} Voltar</button>
+      <div class="flex items-center gap-2.5 mb-4">
+        <div class="catic w-11 h-11 rounded-xl ${badge} flex items-center justify-center">${g.icon}</div>
+        <h2 class="text-lg font-semibold text-slate-800">${g.title}</h2>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">${buttons}</div>
-    </section>`;
-  }).join('');
+      <div class="grid grid-cols-2 gap-2.5">${buttons}</div>`;
+  }
 }
+function openGroup(i) { currentGroup = i; renderCategorias(); window.scrollTo(0, 0); }
+function backToGroups() { currentGroup = null; renderCategorias(); window.scrollTo(0, 0); }
 
 function pickSymptom(sym) {
   chosenSymptom = sym;
